@@ -11,7 +11,7 @@ def common_job = Hudson.instance.getJob("common_test")
 def new_build
 try {
     def params = [
-      new StringParameterValue('JOB', common_job),
+      new StringParameterValue('JOB', jobname),
     ]
     def future = common_job.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
     println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job.url, common_job.fullDisplayName)
