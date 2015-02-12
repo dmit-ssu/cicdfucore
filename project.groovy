@@ -31,6 +31,7 @@ try {
 }
 catch (NullPointerException x) {
     println "No such common job as $jobname"
+    throw new AbortException("${common_job.fullDisplayName} aborted.")
 }
 println HyperlinkNote.encodeTo('/' + new_build.url, new_build.fullDisplayName) + " completed. Result was " + new_build.result
 
