@@ -5,13 +5,16 @@ import java.util.concurrent.CancellationException
 
 // Retrieve parameters of the current build
 def jobname = build.buildVariableResolver.resolve("JOB")
+def gitlink = build.buildVariableResolver.resolve("GITLINK")
 println "JOB=$jobname"
+println "GITLINK=$gitlink"
 
 def common_job = Hudson.instance.getJob("common_test")
 def new_build
 try {
     def params = [
       new StringParameterValue('JOB', jobname),
+      new StringParameterValue('GITLINK', gitlink),
     ]
     def future = common_job.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
     println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job.url, common_job.fullDisplayName)
