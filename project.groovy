@@ -18,7 +18,7 @@ try {
     def params = [
       new StringParameterValue('JOB', jobname),
       new StringParameterValue('GITHUBLINK', githublink),
-      new StringParameterVakue('REPOLINK', repolink)
+      new StringParameterValue('REPOLINK', repolink)
     ]
     def future = common_job.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
     println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job.url, common_job.fullDisplayName)
