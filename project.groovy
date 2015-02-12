@@ -10,7 +10,7 @@ String common_job_name = "common_" + jobname
 println "JOB=$jobname"
 println "GITLINK=$gitlink"
 
-def common_job = Hudson.instance.getJob(common_job_name)
+def common_job = Hudson.instance.getJob(common_job_name.toLowerCase())
 def new_build
 try {
     def params = [
