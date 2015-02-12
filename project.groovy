@@ -6,7 +6,7 @@ import java.util.concurrent.CancellationException
 // Retrieve parameters of the current build
 def jobname = build.buildVariableResolver.resolve("JOB")
 def gitlink = build.buildVariableResolver.resolve("GITLINK")
-String common_job_name = "common_test"
+String common_job_name = "common_" + jobname
 println "JOB=$jobname"
 println "GITLINK=$gitlink"
 
