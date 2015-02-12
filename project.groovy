@@ -7,12 +7,12 @@ import java.util.concurrent.CancellationException
 def jobname = build.buildVariableResolver.resolve("JOB")
 def gituser = build.buildVariableResolver.resolve("GITUSER")
 def gitprj = build.buildVariableResolver.resolve("GITNAME")
-def slavename = build.buildVariableResolver.resolve("SLAVENAME")
-println "$slavename"
+
 // Generate parameters for common build as well as common job name
 String githublink = "git@github.com:" + gituser + '/' + gitprj + '.git'
 String repolink = "https://github.com/" + gituser + '/' + gitprj + '.git'
 String common_jobname = "common_" + jobname.toLowerCase()
+String slavename = jobname.toLowerCase() + "_slave"
 
 def common_job = Hudson.instance.getJob(common_jobname)
 def new_build
@@ -21,7 +21,7 @@ try {
       new StringParameterValue('JOB', jobname),
       new StringParameterValue('GITHUBLINK', githublink),
       new StringParameterValue('REPOLINK', repolink),
-      new StringParameterValue('SLAVENAME', 'cmake_slave'),
+      new StringParameterValue('SLAVENAME', slavename),
     ]
     def future = common_job.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
     println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job.url, common_job.fullDisplayName)
