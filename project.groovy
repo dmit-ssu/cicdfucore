@@ -8,7 +8,7 @@ def jobname = build.buildVariableResolver.resolve("JOB")
 def gituser = build.buildVariableResolver.resolve("GITUSER")
 def gitprj = build.buildVariableResolver.resolve("GITNAME")
 def slavename = build.buildVariableResolver.resolve("SLAVENAME")
-println $slavename
+println "$slavename"
 // Generate parameters for common build as well as common job name
 String githublink = "git@github.com:" + gituser + '/' + gitprj + '.git'
 String repolink = "https://github.com/" + gituser + '/' + gitprj + '.git'
