@@ -6,10 +6,11 @@ import java.util.concurrent.CancellationException
 // Retrieve parameters of the current build
 def jobname = build.buildVariableResolver.resolve("JOB")
 def gitlink = build.buildVariableResolver.resolve("GITLINK")
+String common_job_name = "common_test"
 println "JOB=$jobname"
 println "GITLINK=$gitlink"
 
-def common_job = Hudson.instance.getJob("common_test")
+def common_job = Hudson.instance.getJob(common_job_name)
 def new_build
 try {
     def params = [
