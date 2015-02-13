@@ -7,13 +7,13 @@ import java.util.concurrent.CancellationException
 def jobname = build.buildVariableResolver.resolve("JOB")
 def gituser = build.buildVariableResolver.resolve("GITUSER")
 def gitprj = build.buildVariableResolver.resolve("GITNAME")
-def slavecustom = build.buildVariableResolver.resolve("SLAVENAME")
+def slavecustom = build.buildVariableResolver.resolve("SLAVECUSTOMNAME")
 
 // Generate parameters for common build as well as common job name
 String githublink = "git@github.com:" + gituser + '/' + gitprj + '.git'
 String repolink = "https://github.com/" + gituser + '/' + gitprj + '.git'
 String common_jobname = "common_" + jobname.toLowerCase()
-String slavename = jobname.toLowerCase() + "_" + slavecustom + "_slave"
+String slavename = jobname.toLowerCase() + "_" + slavecustom.toLowerCase() + "_slave"
 
 def common_job = Hudson.instance.getJob(common_jobname)
 def new_build
