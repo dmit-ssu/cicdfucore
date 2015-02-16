@@ -12,7 +12,7 @@ def gitbranch = build.buildVariableResolver.resolve("GITBRANCH")
 // Generate parameters for common build as well as common job name
 //String repolink = "https://github.com/" + gituser + '/' + gitprj + '.git'
 String common_jobname = "common_" + jobname.toLowerCase()
-String slavename = jobname.toLowerCase() + "_" + slavecustom.toLowerCase() + "_slave"
+String slavename = slavecustom.toLowerCase() + "_slave"
 
 def common_job = Hudson.instance.getJob(common_jobname)
 def new_build
