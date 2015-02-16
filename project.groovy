@@ -25,10 +25,7 @@ def params = [
     ]
 //Fix some current build parameters if needed
 def current_params = [
-      new StringParameterValue('GITLINK', gitlink),
-      new StringParameterValue('SLAVENAME', slavename),
-      new StringParameterValue('GITBRANCH', gitbranch),
-      new StringParameterValue('COMMONJOB', common_job),
+      new StringParameterValue('COMMONJOB', common_job)
     ]
 try {
     build.addAction( new ParametersAction(current_params))
