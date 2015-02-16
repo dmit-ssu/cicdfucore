@@ -28,7 +28,7 @@ def current_params = [
       new StringParameterValue('COMMONJOB', common_job)
     ]
 try {
-    Thread.currentThread().executable.addAction( new ParametersAction(current_params))
+    Thread.currentThread().executable.addAction( new ParametersAction(params))
     def future = common_job.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
     println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job.url, common_job.fullDisplayName)
     new_build = future.get()
