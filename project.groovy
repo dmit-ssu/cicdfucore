@@ -18,17 +18,19 @@ def common_job = Hudson.instance.getJob(common_jobname)
 def new_build
 
 //Specify parameters for downstream common build
-def params = [
+
+try {
+   def params = [
       new StringParameterValue('GITLINK', gitlink),
       new StringParameterValue('SLAVENAME', slavename),
       new StringParameterValue('GITBRANCH', gitbranch),
     ]
-//Fix some current build parameters if needed
-def current_params = [
-      new StringParameterValue('COMMONJOB', common_job),
+   //Fix some current build parameters if needed
+   def current_params = [
+   new StringParameterValue('COMMONJOB', common_job),
     ]
-try {
-   // Thread.currentThread().executable.addAction( new ParametersAction(params))
+   
+    Thread.currentThread().executable.addAction( new ParametersAction(current_params))
     def future = common_job.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
     println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job.url, common_job.fullDisplayName)
     new_build = future.get()
