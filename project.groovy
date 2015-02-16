@@ -19,11 +19,11 @@ try {
       new StringParameterValue('SLAVENAME', slavename),
       new StringParameterValue('GITBRANCH', gitbranch),
    ]
-   def current_params = [
+   def current_params = new ParametersAction([
       new StringParameterValue('COMMONJOB', common_job)
-   ]
+   ])
    
-   Thread.currentThread().executable.addAction(new ParametersAction(current_params))
+   Thread.currentThread().executable.addAction(current_params)
    def future = common_job.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
    println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job.url, common_job.fullDisplayName)
    new_build = future.get()
