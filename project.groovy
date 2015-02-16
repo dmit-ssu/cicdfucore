@@ -16,12 +16,22 @@ String slavename = slavecustom.toLowerCase() + "_slave"
 
 def common_job = Hudson.instance.getJob(common_jobname)
 def new_build
-try {
-    def params = [
+
+//Specify parameters for downstream common build
+def params = [
       new StringParameterValue('GITLINK', gitlink),
       new StringParameterValue('SLAVENAME', slavename),
       new StringParameterValue('GITBRANCH', gitbranch),
     ]
+//Fix some current build parameters if needed
+def current_params = [
+      new StringParameterValue('GITLINK', gitlink),
+      new StringParameterValue('SLAVENAME', slavename),
+      new StringParameterValue('GITBRANCH', gitbranch),
+      new StringParameterValue('COMMONJOB', common_job),
+    ]
+try {
+    build.addAction( new ParametersAction(current_params))
     def future = common_job.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
     println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job.url, common_job.fullDisplayName)
     new_build = future.get()
