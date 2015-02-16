@@ -7,6 +7,7 @@ import java.util.concurrent.CancellationException
 def jobname = build.buildVariableResolver.resolve("JOB")
 def gitlink = build.buildVariableResolver.resolve("GITLINK")
 def slavecustom = build.buildVariableResolver.resolve("SLAVECUSTOMNAME")
+def gitbranch = build.buildVariableResolver.resolve("GITBRANCH")
 
 // Generate parameters for common build as well as common job name
 //String repolink = "https://github.com/" + gituser + '/' + gitprj + '.git'
@@ -19,6 +20,7 @@ try {
     def params = [
       new StringParameterValue('GITLINK', gitlink),
       new StringParameterValue('SLAVENAME', slavename),
+      new StringParameterValue('GITBRANCH', gitbranch),
     ]
     def future = common_job.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
     println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job.url, common_job.fullDisplayName)
