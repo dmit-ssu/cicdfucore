@@ -20,7 +20,7 @@ try {
       new StringParameterValue('GITBRANCH', gitbranch),
    ]
    def current_params = new ParametersAction([
-      new StringParameterValue('COMMONJOB', common_job)
+      new StringParameterValue('COMMONJOB', common_jobname)
    ])
    
    Thread.currentThread().executable.addAction(current_params)
