@@ -50,7 +50,7 @@ def buildstudent = {
       build.result = new_build.result
       if (new_build.result != Result.SUCCESS && new_build.result != Result.UNSTABLE) {
       // We abort this build right here and now.
-        // throw new AbortException("${new_build.fullDisplayName} failed.")
+         throw new AbortException("${new_build.fullDisplayName} failed.")
       }
 
 }
