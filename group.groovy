@@ -7,11 +7,14 @@ import java.util.concurrent.CancellationException
 def jobname = build.buildVariableResolver.resolve("JOB")
 def gitlink = build.buildVariableResolver.resolve("GITLINK")
 def slavecustom = build.buildVariableResolver.resolve("SLAVECUSTOMNAME")
+def studentlist = build.buildVariableResolver.resolve("STUDENTLIST")
 def gitbranch = build.buildVariableResolver.resolve("GITBRANCH")
 // Generate parameters for common build as well as common job name
 String common_jobname = "common_" + jobname.toLowerCase()
 String slavename = slavecustom.toLowerCase() + "_slave"
+String students[] = studentlist.tokenize('\n')
 
+students.each{println it;}
 def params = [
       new StringParameterValue('GITLINK', gitlink),
       new StringParameterValue('SLAVENAME', slavename),
