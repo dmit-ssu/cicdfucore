@@ -15,7 +15,7 @@ String common_jobname = "common_" + jobname.toLowerCase()
 String slavename = slavecustom.toLowerCase() + "_slave"
 def students = [:]
 //get all links
-studentlist.splitEachLine(/\s(?=(http|ftp)\S*(.git))/, {  students.columns.collectEntries{[it.name, it.val]}})
+studentlist.splitEachLine(/\s(?=(http|ftp)\S*(.git))/, { students << [it[0] : it[1] })
 println students.toMapString()
 def params = [
       new StringParameterValue('GITLINK', gitlink),
