@@ -24,7 +24,7 @@ def new_build
 def buildstudent = {
       student ->
       def params = [
-            new StringParameterValue('GITLINK', student.key),
+            new StringParameterValue('GITLINK', student.value),
             new StringParameterValue('SLAVENAME', slavename),
             new StringParameterValue('GITBRANCH', gitbranch),
             new StringParameterValue('COMMONJOB', common_jobname),
@@ -48,6 +48,7 @@ def buildstudent = {
       
       // Check that it succeeded
       build.result = new_build.result
+      throw new AbortException("${new_build.fullDisplayName} failed.")
       if (new_build.result != Result.SUCCESS && new_build.result != Result.UNSTABLE) {
       // We abort this build right here and now.
         // throw new AbortException("${new_build.fullDisplayName} failed.")
