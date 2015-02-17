@@ -14,7 +14,7 @@ def gitbranch = build.buildVariableResolver.resolve("GITBRANCH")
 String common_jobname = "common_" + jobname.toLowerCase()
 String slavename = slavecustom.toLowerCase() + "_slave"
 def students = [:]
-studentlist.splitEachLine(Pattern.compile(".&&\S*"), {  println it})
+studentlist.splitEachLine(/\S*/, {  println it})
 students..toList().each{println it;}
 def params = [
       new StringParameterValue('GITLINK', gitlink),
