@@ -12,9 +12,9 @@ def gitbranch = build.buildVariableResolver.resolve("GITBRANCH")
 // Generate parameters for common build as well as common job name
 String common_jobname = "common_" + jobname.toLowerCase()
 String slavename = slavecustom.toLowerCase() + "_slave"
-def students = studentlist.tokenize('\n')
-
-students.each{println it;}
+def students = [:]
+studentlist.splitEachLine(Pattern.compile("*\s*"), {  println it})
+students..toList().each{println it;}
 def params = [
       new StringParameterValue('GITLINK', gitlink),
       new StringParameterValue('SLAVENAME', slavename),
