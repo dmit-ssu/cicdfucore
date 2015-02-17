@@ -24,7 +24,7 @@ def new_build
 def buildstudent = {
       student ->
       def params = [
-            new StringParameterValue('GITLINK', student.key),
+            new StringParameterValue('GITLINK', student.value),
             new StringParameterValue('SLAVENAME', slavename),
             new StringParameterValue('GITBRANCH', gitbranch),
             new StringParameterValue('COMMONJOB', common_jobname),
