@@ -54,3 +54,4 @@ def buildstudent = {
       }
 
 }
+students.each(buildstudent)
