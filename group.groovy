@@ -2,6 +2,7 @@ import hudson.model.*
 import hudson.AbortException
 import hudson.console.HyperlinkNote
 import java.util.concurrent.CancellationException
+import java.util.regex.*
 
 // Retrieve parameters of the current build
 def jobname = build.buildVariableResolver.resolve("JOB")
