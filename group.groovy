@@ -20,8 +20,8 @@ println students.toMapString()
 
 def common_job = Hudson.instance.getJob(common_jobname)
 def new_build
-
-def buildstudent = {
+def futures[]
+students.each({
       student ->
       def params = [
             new StringParameterValue('GITLINK', student.value),
@@ -34,7 +34,7 @@ def buildstudent = {
       try {
          //Sharing parameters between main build and common_job build
          build.addAction(new ParametersAction(params))
-         def future = common_job.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
+         futures.add(common_job.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params)))
          println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job.url, common_job.fullDisplayName)
          //new_build = future.get()
       } catch (CancellationException x) {
@@ -55,5 +55,10 @@ def buildstudent = {
         // throw new AbortException("${new_build.fullDisplayName} failed.")
       ///}
 
-}
-students.each(buildstudent)
+})
+
+futures.each(
+      {
+            future -> new_build = future.get() 
+            println HyperlinkNote.encodeTo('/' + new_build.url, new_build.fullDisplayName) + " completed. Result was " + new_build.result
+      })
