@@ -26,6 +26,7 @@ studentlist.splitEachLine(/\s(?=(http|ftp)\S*(.git))/, {
 //#DEBUG#
 //println students.toMapString()
  def params = [
+            new StringParameterValue('SLAVENAME', slavename),
             new StringParameterValue('COMMONJOB', common_jobname),
          ]
 
