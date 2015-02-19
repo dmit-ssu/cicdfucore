@@ -28,6 +28,7 @@ def buildstudent = {
             new StringParameterValue('SLAVENAME', slavename),
             new StringParameterValue('GITBRANCH', gitbranch),
             new StringParameterValue('COMMONJOB', common_jobname),
+            new StringParameterValue('JOB', jobname), ///student.key
          ]
       
       try {
@@ -35,7 +36,7 @@ def buildstudent = {
          build.addAction(new ParametersAction(params))
          def future = common_job.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
          println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job.url, common_job.fullDisplayName)
-         new_build = future.get()
+         //new_build = future.get()
       } catch (CancellationException x) {
          throw new AbortException("${common_job.fullDisplayName} aborted.")
       }
@@ -44,15 +45,15 @@ def buildstudent = {
          throw new AbortException("$jobname aborted.")
       }
       
-      println HyperlinkNote.encodeTo('/' + new_build.url, new_build.fullDisplayName) + " completed. Result was " + new_build.result
+      //println HyperlinkNote.encodeTo('/' + new_build.url, new_build.fullDisplayName) + " completed. Result was " + new_build.result
       
       // Check that it succeeded
-      build.result = new_build.result
+      //build.result = new_build.result
       throw new AbortException("${new_build.fullDisplayName} failed.")
-      if (new_build.result != Result.SUCCESS && new_build.result != Result.UNSTABLE) {
+      //if (new_build.result != Result.SUCCESS && new_build.result != Result.UNSTABLE) {
       // We abort this build right here and now.
         // throw new AbortException("${new_build.fullDisplayName} failed.")
-      }
+      ///}
 
 }
 students.each(buildstudent)
