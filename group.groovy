@@ -26,11 +26,11 @@ studentlist.splitEachLine(/\s(?=(http|ftp)\S*(.git))/, {
 //#DEBUG#
 //println students.toMapString()
  def params = [
-            new StringParameterValue('GITLINK', student.value),
+            new StringParameterValue('GITLINK', gitlink),
             new StringParameterValue('SLAVENAME', slavename),
             new StringParameterValue('GITBRANCH', gitbranch),
             new StringParameterValue('COMMONJOB', common_jobname),
-            new StringParameterValue('JOB', student.key.tr(" ", "_")),
+            new StringParameterValue('JOB', jobname),
          ]
 
 //Running a clean job first
