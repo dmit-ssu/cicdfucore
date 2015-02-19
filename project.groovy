@@ -26,7 +26,7 @@ try {
    //Sharing parameters between main build and common_job build
    build.addAction(new ParametersAction(params))
    def future = common_job.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
-   println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job.url, common_job.fullDisplayName)
+   println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job.url, common_job.fullDisplayName) + " for " + jobname
    new_build = future.get()
 } catch (CancellationException x) {
    throw new AbortException("${common_job.fullDisplayName} aborted.")
@@ -36,7 +36,7 @@ catch (NullPointerException x) {
    throw new AbortException("$jobname aborted.")
 }
 
-println HyperlinkNote.encodeTo('/' + new_build.url, new_build.fullDisplayName) + " completed. Result was " + new_build.result
+println HyperlinkNote.encodeTo('/' + new_build.url, new_build.fullDisplayName) + " for " + jobname + " completed. Result was " + new_build.result
 
 // Check that it succeeded
 build.result = new_build.result
