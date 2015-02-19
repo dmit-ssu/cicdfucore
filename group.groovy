@@ -20,10 +20,10 @@ def students = [:]
 studentlist.splitEachLine(/\s(?=(http|ftp)\S*(.git))/, {
       if(it.size()==2){
             //removing spaces from names
-            def splits = it[0].split()
-            it[0] = ""
-            splits.each({str -> it[0] += str})
-            students << [(it[0]) : (it[1])]
+            //def splits = it[0].split()
+            //it[0] = ""
+            //splits.each({str -> it[0] += str})
+            students << [(it[0].tr(" ", "_")) : (it[1])]
       }
       
 })
