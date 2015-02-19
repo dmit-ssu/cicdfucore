@@ -19,11 +19,7 @@ String slavename = slavecustom.toLowerCase() + "_slave"
 def students = [:]
 studentlist.splitEachLine(/\s(?=(http|ftp)\S*(.git))/, {
       if(it.size()==2){
-            //removing spaces from names
-            //def splits = it[0].split()
-            //it[0] = ""
-            //splits.each({str -> it[0] += str})
-            students << [(it[0].tr(" ", "_")) : (it[1])]
+            students << [(it[0] : (it[1])]
       }
       
 })
@@ -41,7 +37,7 @@ students.each({
             new StringParameterValue('SLAVENAME', slavename),
             new StringParameterValue('GITBRANCH', gitbranch),
             new StringParameterValue('COMMONJOB', common_jobname),
-            new StringParameterValue('JOB', student.key),
+            new StringParameterValue('JOB', student.key.tr(" ", "_")),
          ]
       
       try {
