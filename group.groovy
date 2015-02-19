@@ -28,7 +28,7 @@ studentlist.splitEachLine(/\s(?=(http|ftp)\S*(.git))/, {
       
 })
 //#DEBUG#
-println students.toMapString()
+//println students.toMapString()
 
 def common_job = Hudson.instance.getJob(common_jobname)
 def new_build
@@ -62,7 +62,7 @@ students.each({
 //Get results for those builds
 futures.each({
       future -> new_build = future.value.get()
-      println HyperlinkNote.encodeTo('/' + new_build.url, new_build.fullDisplayName) + " completed. Result was " + new_build.result
+      println HyperlinkNote.encodeTo('/' + new_build.url, new_build.fullDisplayName) + " for" + future.key + " completed. Result was " + new_build.result
 })
 
 build.result
