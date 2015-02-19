@@ -4,7 +4,8 @@ import hudson.console.HyperlinkNote
 import java.util.concurrent.CancellationException
 
 // Retrieve parameters of the current build
-def main_jobname = build.buildVariableResolver.resolve("JOB_NAME")
+//def main_jobname = build.buildVariableResolver.resolve("JOB_NAME")
+def main_jobname = System.getProperty("JOB_NAME")
 def jobname = build.buildVariableResolver.resolve("JOB")
 def gitlink = build.buildVariableResolver.resolve("GITLINK")
 def slavecustom = build.buildVariableResolver.resolve("SLAVECUSTOMNAME")
