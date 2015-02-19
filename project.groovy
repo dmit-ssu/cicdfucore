@@ -17,7 +17,7 @@ def params = [
       new StringParameterValue('SLAVENAME', slavename),
       new StringParameterValue('GITBRANCH', gitbranch),
       new StringParameterValue('COMMONJOB', common_jobname),
-      new StringParameterValue('JOB', jobname),
+      new StringParameterValue('JOB', jobname.tr(" ", "_"),
    ]
 
 def common_job = Hudson.instance.getJob(common_jobname)
@@ -44,3 +44,5 @@ if (new_build.result != Result.SUCCESS && new_build.result != Result.UNSTABLE) {
 // We abort this build right here and now.
    throw new AbortException("${new_build.fullDisplayName} failed.")
 }
+
+return build.result
