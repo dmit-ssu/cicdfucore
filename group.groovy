@@ -15,7 +15,15 @@ String common_jobname = "common_" + jobname.toLowerCase()
 String slavename = slavecustom.toLowerCase() + "_slave"
 //Generating student map
 def students = [:]
-studentlist.splitEachLine(/\s(?=(http|ftp)\S*(.git))/, { if(it.size()==2) students << [(it[0]) : (it[1])] })
+studentlist.splitEachLine(/\s(?=(http|ftp)\S*(.git))/, {
+      if(it.size()==2){
+            def splits = it[0].split()
+            it[0] = ""
+            splits.each({str -> it[0] += str})
+            students << [(it[0]) : (it[1])]
+      }
+      
+})
 println students.toMapString()
 
 def common_job = Hudson.instance.getJob(common_jobname)
