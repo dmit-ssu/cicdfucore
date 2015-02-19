@@ -4,8 +4,6 @@ import hudson.console.HyperlinkNote
 import java.util.concurrent.CancellationException
 
 // Retrieve parameters of the current build
-//def main_jobname = build.buildVariableResolver.resolve("JOB_NAME")
-def main_jobname = System.getProperty("JOB_NAME")
 def jobname = build.buildVariableResolver.resolve("JOB")
 def gitlink = build.buildVariableResolver.resolve("GITLINK")
 def slavecustom = build.buildVariableResolver.resolve("SLAVECUSTOMNAME")
@@ -19,7 +17,7 @@ def params = [
       new StringParameterValue('SLAVENAME', slavename),
       new StringParameterValue('GITBRANCH', gitbranch),
       new StringParameterValue('COMMONJOB', common_jobname),
-      new StringParameterValue('JOB', main_jobname.tr(" ", "_")),
+      new StringParameterValue('JOB', jobname.tr(" ", "_")),
    ]
 
 def common_job = Hudson.instance.getJob(common_jobname)
