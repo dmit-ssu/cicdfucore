@@ -25,6 +25,35 @@ studentlist.splitEachLine(/\s(?=(http|ftp)\S*(.git))/, {
 })
 //#DEBUG#
 //println students.toMapString()
+ def params = [
+            new StringParameterValue('GITLINK', student.value),
+            new StringParameterValue('SLAVENAME', slavename),
+            new StringParameterValue('GITBRANCH', gitbranch),
+            new StringParameterValue('COMMONJOB', common_jobname),
+            new StringParameterValue('JOB', student.key.tr(" ", "_")),
+         ]
+
+//Running a clean job first
+def common_job_clean = Hudson.instance.getJob("common_clean")
+def clean_build
+try {
+      //Sharing parameters between main build and common_job_clean build
+      def future = common_job_clean.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
+      println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job_clean.url, common_job_clean.fullDisplayName) + " for " + jobname
+      clean_build = future.get()
+} catch (CancellationException x) {
+      throw new AbortException("${common_job.fullDisplayName} aborted.")
+}
+catch (NullPointerException x) {
+      println "common_clean job was not found. Have you copied it?"
+      throw new AbortException("Cleaning failed.")
+}
+build.result = clean_build.result
+if (clean_build.result != Result.SUCCESS && clean_build.result != Result.UNSTABLE) {
+      // We abort this build right here and now.
+      throw new AbortException("${clean_build.fullDisplayName} failed.")
+}
+
 
 def common_job = Hudson.instance.getJob(common_jobname)
 def new_build
@@ -32,7 +61,7 @@ def futures = [:] //List of students + builds assigned to them
 //Schedule student builds
 students.each({
       student ->
-      def params = [
+      params = [
             new StringParameterValue('GITLINK', student.value),
             new StringParameterValue('SLAVENAME', slavename),
             new StringParameterValue('GITBRANCH', gitbranch),
