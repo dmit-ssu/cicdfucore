@@ -20,7 +20,7 @@ println students.toMapString()
 
 def common_job = Hudson.instance.getJob(common_jobname)
 def new_build
-def futures[]
+def futures = []
 students.each({
       student ->
       def params = [
