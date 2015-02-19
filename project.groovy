@@ -17,7 +17,7 @@ def params = [
       new StringParameterValue('SLAVENAME', slavename),
       new StringParameterValue('GITBRANCH', gitbranch),
       new StringParameterValue('COMMONJOB', common_jobname),
-      new StringParameterValue('JOB', jobname.tr(" ", "_"),
+      new StringParameterValue('JOB', jobname.tr(" ", "_")),
    ]
 
 def common_job = Hudson.instance.getJob(common_jobname)
