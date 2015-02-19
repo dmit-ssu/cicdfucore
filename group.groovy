@@ -19,7 +19,7 @@ String slavename = slavecustom.toLowerCase() + "_slave"
 def students = [:]
 studentlist.splitEachLine(/\s(?=(http|ftp)\S*(.git))/, {
       if(it.size()==2){
-            students << [(it[0] : (it[1])]
+            students << [(it[0]) : (it[1])]
       }
       
 })
