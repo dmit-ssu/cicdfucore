@@ -4,20 +4,20 @@ import hudson.console.HyperlinkNote
 import java.util.concurrent.CancellationException
 
 // Retrieve parameters of the current build
-def jobname = build.buildVariableResolver.resolve("JOB")
-def gitlink = build.buildVariableResolver.resolve("GITLINK")
-def slavecustom = build.buildVariableResolver.resolve("SLAVECUSTOMNAME")
-def gitbranch = build.buildVariableResolver.resolve("GITBRANCH")
+def cicd_jobparam = build.buildVariableResolver.resolve("CICD_JOB")
+def cicd_gitlinkparam = build.buildVariableResolver.resolve("CICD_GITLINK")
+def cicd_slavecustomparam = build.buildVariableResolver.resolve("CICD_SLAVECUSTOMNAME")
+def cicd_gitbranchparam = build.buildVariableResolver.resolve("CICD_GITBRANCH")
 // Generate parameters for common build as well as common job name
-String common_jobname = "common_" + jobname.toLowerCase()
-String slavename = slavecustom.toLowerCase() + "_slave"
-
+String common_jobname = "common_" + cicd_jobparam.toLowerCase()
+String slavename = cicd_slavecustomparam.toLowerCase() + "_slave"
+println build
 def params = [
-      new StringParameterValue('GITLINK', gitlink),
+      new StringParameterValue('GITLINK', cicd_jobparam),
       new StringParameterValue('SLAVENAME', slavename),
-      new StringParameterValue('GITBRANCH', gitbranch),
+      new StringParameterValue('GITBRANCH', cicd_gitbranchparam),
       new StringParameterValue('COMMONJOB', common_jobname),
-      new StringParameterValue('JOB', jobname.tr(" ", "_")),
+      new StringParameterValue('JOB', cicd_jobparam.tr(" ", "_")),
    ]
 
 //Running a clean job first
@@ -26,7 +26,7 @@ def clean_build
 try {
    //Sharing parameters between main build and common_job_clean build
    def future = common_job_clean.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
-   println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job_clean.url, common_job_clean.fullDisplayName) + " for " + jobname
+   println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job_clean.url, common_job_clean.fullDisplayName) + " for " + cicd_jobparam
    clean_build = future.get()
 } catch (CancellationException x) {
    throw new AbortException("${common_job.fullDisplayName} aborted.")
@@ -42,24 +42,24 @@ if (clean_build.result != Result.SUCCESS && clean_build.result != Result.UNSTABL
    throw new AbortException("${clean_build.fullDisplayName} failed.")
 }
 
-
+//Running actual job
 def common_job = Hudson.instance.getJob(common_jobname)
 def new_build
 try {
    //Sharing parameters between main build and common_job build
    build.addAction(new ParametersAction(params))
    def future = common_job.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
-   println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job.url, common_job.fullDisplayName) + " for " + jobname
+   println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job.url, common_job.fullDisplayName) + " for " + cicd_jobparam
    new_build = future.get()
 } catch (CancellationException x) {
    throw new AbortException("${common_job.fullDisplayName} aborted.")
 }
 catch (NullPointerException x) {
-   println "No such common job as $jobname"
-   throw new AbortException("$jobname aborted.")
+   println "No such common job as $cicd_jobparam"
+   throw new AbortException("$cicd_jobparam aborted.")
 }
 
-println HyperlinkNote.encodeTo('/' + new_build.url, new_build.fullDisplayName) + " for " + jobname + " completed. Result was " + new_build.result
+println HyperlinkNote.encodeTo('/' + new_build.url, new_build.fullDisplayName) + " for " + cicd_jobparam + " completed. Result was " + new_build.result
 
 // Check that it succeeded
 build.result = new_build.result
