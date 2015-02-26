@@ -12,11 +12,11 @@ def cicd_gitbranchparam = build.buildVariableResolver.resolve("CICD_GITBRANCH")
 String common_jobname = "common_" + cicd_jobparam.toLowerCase()
 String slavename = cicd_slavecustomparam.toLowerCase() + "_slave"
 def params = [
-      new StringParameterValue('GITLINK', cicd_gitlinkparam),
-      new StringParameterValue('SLAVENAME', slavename),
-      new StringParameterValue('GITBRANCH', cicd_gitbranchparam),
-      new StringParameterValue('COMMONJOB', common_jobname),
-      new StringParameterValue('JOB', build.toString().tr(" ", "_")),
+      new StringParameterValue('CICD_GITLINK', cicd_gitlinkparam),
+      new StringParameterValue('CICD_SLAVENAME', slavename),
+      new StringParameterValue('CICD_GITBRANCH', cicd_gitbranchparam),
+      new StringParameterValue('CICD_COMMONJOB', common_jobname),
+      new StringParameterValue('CICD_BUILD', build.toString().tr(" ", "_")),
    ]
 
 //Running a clean job first
