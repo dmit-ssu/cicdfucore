@@ -11,9 +11,8 @@ def cicd_gitbranchparam = build.buildVariableResolver.resolve("CICD_GITBRANCH")
 // Generate parameters for common build as well as common job name
 String common_jobname = "common_" + cicd_jobparam.toLowerCase()
 String slavename = cicd_slavecustomparam.toLowerCase() + "_slave"
-println build
 def params = [
-      new StringParameterValue('GITLINK', cicd_jobparam),
+      new StringParameterValue('GITLINK', cicd_gitlinkparam),
       new StringParameterValue('SLAVENAME', slavename),
       new StringParameterValue('GITBRANCH', cicd_gitbranchparam),
       new StringParameterValue('COMMONJOB', common_jobname),
