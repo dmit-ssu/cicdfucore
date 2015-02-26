@@ -17,7 +17,7 @@ def params = [
       new StringParameterValue('SLAVENAME', slavename),
       new StringParameterValue('GITBRANCH', cicd_gitbranchparam),
       new StringParameterValue('COMMONJOB', common_jobname),
-      new StringParameterValue('JOB', build.ToString().tr(" ", "_")),
+      new StringParameterValue('JOB', build.toString().tr(" ", "_")),
    ]
 
 //Running a clean job first
