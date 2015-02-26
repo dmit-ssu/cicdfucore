@@ -5,29 +5,27 @@ import java.util.concurrent.CancellationException
 import java.util.regex.*
 
 // Retrieve parameters of the current build
-def jobname = build.buildVariableResolver.resolve("JOB")
-def gitlink = build.buildVariableResolver.resolve("GITLINK")
-def slavecustom = build.buildVariableResolver.resolve("SLAVECUSTOMNAME")
-def studentlist = build.buildVariableResolver.resolve("STUDENTLIST")
-def gitbranch = build.buildVariableResolver.resolve("GITBRANCH")
+def cicd_jobparam = build.buildVariableResolver.resolve("CICD_JOB")
+def cicd_gitlinkparam = build.buildVariableResolver.resolve("CICD_GITLINK")
+def cicd_slavecustomparam = build.buildVariableResolver.resolve("CICD_SLAVECUSTOMNAME")
+def cicd_studentlistparam = build.buildVariableResolver.resolve("CICD_STUDENTLIST")
+def cicd_gitbranchparam = build.buildVariableResolver.resolve("CICD_GITBRANCH")
 
 // Generate parameters for common build as well as common job name
-String common_jobname = "common_" + jobname.toLowerCase()
-String slavename = slavecustom.toLowerCase() + "_slave"
+String common_jobname = "common_" + cicd_jobparam.toLowerCase()
+String slavename = cicd_slavecustomparam.toLowerCase() + "_slave"
 
 //Generating student map
 def students = [:]
-studentlist.splitEachLine(/\s(?=(http|ftp)\S*(.git))/, {
+cicd_studentlistparam.splitEachLine(/\s(?=(http|ftp)\S*(.git))/, {
       if(it.size()==2){
             students << [(it[0]) : (it[1])]
       }
       
 })
-//#DEBUG#
-//println students.toMapString()
  def params = [
-            new StringParameterValue('SLAVENAME', slavename),
-            new StringParameterValue('COMMONJOB', common_jobname),
+            new StringParameterValue('CICD_SLAVENAME', slavename),
+            new StringParameterValue('CICD_COMMONJOB', common_jobname),
          ]
 
 //Running a clean job first
@@ -36,7 +34,7 @@ def clean_build
 try {
       //Sharing parameters between main build and common_job_clean build
       def future = common_job_clean.scheduleBuild2(0, new Cause.UpstreamCause(build), new ParametersAction(params))
-      println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job_clean.url, common_job_clean.fullDisplayName) + " for " + jobname
+      println "Waiting for the completion of " + HyperlinkNote.encodeTo('/' + common_job_clean.url, common_job_clean.fullDisplayName) + " for " + cicd_jobparam
       clean_build = future.get()
 } catch (CancellationException x) {
       throw new AbortException("${common_job.fullDisplayName} aborted.")
@@ -59,11 +57,11 @@ def futures = [:] //List of students + builds assigned to them
 students.each({
       student ->
       params = [
-            new StringParameterValue('GITLINK', student.value),
-            new StringParameterValue('SLAVENAME', slavename),
-            new StringParameterValue('GITBRANCH', gitbranch),
-            new StringParameterValue('COMMONJOB', common_jobname),
-            new StringParameterValue('JOB', student.key.tr(" ", "_")),
+            new StringParameterValue('CICD_GITLINK', student.value),
+            new StringParameterValue('CICD_SLAVENAME', slavename),
+            new StringParameterValue('CICD_GITBRANCH', cicd_gitbranchparam),
+            new StringParameterValue('CICD_COMMONJOB', common_jobname),
+            new StringParameterValue('CICD_BUILD', student.key.tr(" ", "_")),
          ]
       
       try {
@@ -77,7 +75,7 @@ students.each({
       }
       catch (NullPointerException x) {
          println "No such common job as $jobname"
-         throw new AbortException("$jobname aborted.")
+         throw new AbortException("$cicd_jobparam aborted.")
       }
 })
 
