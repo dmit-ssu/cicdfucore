@@ -9,7 +9,8 @@ def cicd_gitlinkparam = build.buildVariableResolver.resolve("CICD_GITLINK")
 def cicd_slavecustomparam = build.buildVariableResolver.resolve("CICD_SLAVECUSTOMNAME")
 def cicd_gitbranchparam = build.buildVariableResolver.resolve("CICD_GITBRANCH")
 // Generate parameters for common build as well as common job name
-String common_jobname = "common_" + cicd_jobparam.toLowerCase()
+String common_name = cicd_jobparam.toLowerCase()
+String common_jobname = "common_" + common_name
 String slavename = cicd_slavecustomparam.toLowerCase() + "_slave"
 def params = [
       new StringParameterValue('CICD_GITLINK', cicd_gitlinkparam),
@@ -41,8 +42,44 @@ if (clean_build.result != Result.SUCCESS && clean_build.result != Result.UNSTABL
    throw new AbortException("${clean_build.fullDisplayName} failed.")
 }
 
-//Running actual job
+//Getting actual job
 def common_job = Hudson.instance.getJob(common_jobname)
+if (common_job == null) {
+   println "Common job as $cicd_jobparam not found... trying to create it from template."
+
+   String template_name = "common_template"
+   String common_prop_name = "CICD_COMMON_NAME"
+   def template
+   try {
+      template = Hudson.instance.getItem(template_name)
+   } catch (NullPointerException x) {
+      println "Template job $template_name for common jobs not found"
+      throw new AbortException("Creating $cicd_jobparam from template aborted.")
+   }
+   common_job = Hudson.instance.copy(template, common_jobname)
+
+   def common_prop = null
+   def props = common_job.getProperty(ParametersDefinitionProperty.class)
+   def i = props.getParameterDefinitions().iterator()
+   while (i.hasNext()) {
+      if (i.next().name == common_prop_name) {
+         common_prop = new StringParameterDefinition(i.name, common_name, i.getDescription())
+         i.remove()
+         break
+      }
+   }
+   if (common_prop == null)
+      common_prop = new StringParameterDefinition(common_prop_name, common_name, "")
+   props.getParameterDefinitions().add(common_prop)
+
+   common_job.save()
+   Hudson.instance.reload();
+   println "Job $cicd_jobparam from template created"
+
+   common_job = Hudson.instance.getJob(common_jobname)
+}
+
+//Running actual job
 def new_build
 try {
    //Sharing parameters between main build and common_job build
