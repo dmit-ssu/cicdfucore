@@ -4,7 +4,8 @@ import hudson.console.HyperlinkNote
 import java.util.concurrent.CancellationException
 
 // Retrieve parameters of the current build
-def cicd_jobparam = build.buildVariableResolver.resolve("CICD_JOB")
+def cicd_jobparam = build.buildVariableResolver.resolve("CICD_COMMON_NAME")
+def cicd_typeparam = build.buildVariableResolver.resolve("CICD_COMMON_TYPE")
 def cicd_gitlinkparam = build.buildVariableResolver.resolve("CICD_GITLINK")
 def cicd_slavecustomparam = build.buildVariableResolver.resolve("CICD_SLAVECUSTOMNAME")
 def cicd_gitbranchparam = build.buildVariableResolver.resolve("CICD_GITBRANCH")
