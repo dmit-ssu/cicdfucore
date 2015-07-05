@@ -8,6 +8,7 @@ def cicd_jobparam = build.buildVariableResolver.resolve("CICD_JOB")
 def cicd_gitlinkparam = build.buildVariableResolver.resolve("CICD_GITLINK")
 def cicd_slavecustomparam = build.buildVariableResolver.resolve("CICD_SLAVECUSTOMNAME")
 def cicd_gitbranchparam = build.buildVariableResolver.resolve("CICD_GITBRANCH")
+def cicd_core_repo = build.buildVariableResolver.resolve("CICD_CORE_REPO")
 def cicd_template_name = build.buildVariableResolver.resolve("CICD_TEMPLATE_COMMON")
 if (cicd_template_name == null) cicd_template_name = "template_common"
 // Generate parameters for common build as well as common job name
@@ -15,6 +16,7 @@ String common_name = cicd_jobparam.toLowerCase()
 String common_jobname = "common_" + common_name
 String slavename = cicd_slavecustomparam.toLowerCase() + "_slave"
 def params = [
+      new StringParameterValue('CICD_CORE_REPO', cicd_core_repo),
       new StringParameterValue('CICD_GITLINK', cicd_gitlinkparam),
       new StringParameterValue('CICD_SLAVENAME', slavename),
       new StringParameterValue('CICD_GITBRANCH', cicd_gitbranchparam),

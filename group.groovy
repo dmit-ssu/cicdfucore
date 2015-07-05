@@ -10,6 +10,7 @@ def cicd_gitlinkparam = build.buildVariableResolver.resolve("CICD_GITLINK")
 def cicd_slavecustomparam = build.buildVariableResolver.resolve("CICD_SLAVECUSTOMNAME")
 def cicd_studentlistparam = build.buildVariableResolver.resolve("CICD_STUDENTLIST")
 def cicd_gitbranchparam = build.buildVariableResolver.resolve("CICD_GITBRANCH")
+def cicd_core_repo = build.buildVariableResolver.resolve("CICD_CORE_REPO")
 
 // Generate parameters for common build as well as common job name
 String common_jobname = "common_" + cicd_jobparam.toLowerCase()
@@ -24,6 +25,7 @@ cicd_studentlistparam.splitEachLine(/\s(?=(http|ftp)\S*(.git))/, {
       
 })
  def params = [
+            new StringParameterValue('CICD_CORE_REPO', cicd_core_repo),
             new StringParameterValue('CICD_SLAVENAME', slavename),
             new StringParameterValue('CICD_JOBNAME', common_jobname),
          ]
@@ -57,6 +59,7 @@ def futures = [:] //List of students + builds assigned to them
 students.each({
       student ->
       params = [
+            new StringParameterValue('CICD_CORE_REPO', cicd_core_repo),
             new StringParameterValue('CICD_GITLINK', student.value),
             new StringParameterValue('CICD_SLAVENAME', slavename),
             new StringParameterValue('CICD_GITBRANCH', cicd_gitbranchparam),
