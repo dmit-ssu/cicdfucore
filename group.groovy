@@ -25,7 +25,7 @@ cicd_studentlistparam.splitEachLine(/\s(?=(http|ftp)\S*(.git))/, {
 })
  def params = [
             new StringParameterValue('CICD_SLAVENAME', slavename),
-            new StringParameterValue('CICD_COMMONJOB', common_jobname),
+            new StringParameterValue('CICD_JOBNAME', common_jobname),
          ]
 
 //Running a clean job first
@@ -60,7 +60,7 @@ students.each({
             new StringParameterValue('CICD_GITLINK', student.value),
             new StringParameterValue('CICD_SLAVENAME', slavename),
             new StringParameterValue('CICD_GITBRANCH', cicd_gitbranchparam),
-            new StringParameterValue('CICD_COMMONJOB', common_jobname),
+            new StringParameterValue('CICD_JOBNAME', common_jobname),
             new StringParameterValue('CICD_BUILD', student.key.tr(" ", "_")),
          ]
       

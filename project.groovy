@@ -16,7 +16,7 @@ def params = [
       new StringParameterValue('CICD_GITLINK', cicd_gitlinkparam),
       new StringParameterValue('CICD_SLAVENAME', slavename),
       new StringParameterValue('CICD_GITBRANCH', cicd_gitbranchparam),
-      new StringParameterValue('CICD_COMMONJOB', common_jobname),
+      new StringParameterValue('CICD_JOBNAME', common_jobname),
       new StringParameterValue('CICD_BUILD', build.toString().tr(" ", "_")),
    ]
 
