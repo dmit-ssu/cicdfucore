@@ -8,6 +8,8 @@ def cicd_jobparam = build.buildVariableResolver.resolve("CICD_JOB")
 def cicd_gitlinkparam = build.buildVariableResolver.resolve("CICD_GITLINK")
 def cicd_slavecustomparam = build.buildVariableResolver.resolve("CICD_SLAVECUSTOMNAME")
 def cicd_gitbranchparam = build.buildVariableResolver.resolve("CICD_GITBRANCH")
+def cicd_template_name = build.buildVariableResolver.resolve("CICD_TEMPLATE_COMMON")
+if (cicd_template_name == null) cicd_template_name = "template_common"
 // Generate parameters for common build as well as common job name
 String common_name = cicd_jobparam.toLowerCase()
 String common_jobname = "common_" + common_name
@@ -47,13 +49,12 @@ def common_job = Hudson.instance.getJob(common_jobname)
 if (common_job == null) {
    println "Common job as $cicd_jobparam not found... trying to create it from template."
 
-   String template_name = "common_template"
    String common_prop_name = "CICD_COMMON_NAME"
    def template
    try {
-      template = Hudson.instance.getItem(template_name)
+      template = Hudson.instance.getItem(cicd_template_name)
    } catch (NullPointerException x) {
-      println "Template job $template_name for common jobs not found"
+      println "Template job $cicd_template_name for common jobs not found"
       throw new AbortException("Creating $cicd_jobparam from template aborted.")
    }
    common_job = Hudson.instance.copy(template, common_jobname)
